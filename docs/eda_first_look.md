@@ -47,6 +47,12 @@
 - **Implication:** A fan-out is when one account quickly sends money out to many different accounts, spreading the funds to make them harder to trace. The typology labels let me measure which laundering types my model catches and misses.
 - **Action:** Use the Patterns file for per-typology error analysis in Phase 3.
 
+## Finding 9: Bank codes are formatted differently across files
+- Transactions file pads bank codes with leading zeros (`010`, `002845`); accounts file does not (`10`).
+- Proof: account `803500540` is bank `010` in transactions but bank `10` in accounts.
+- Impact: matching files on bank code would silently fail (`"010"` ≠ `"10"`).
+- Decision: bronze keeps both formats unchanged (bank codes as strings); silver makes them consistent.
+
 ## Open questions (to investigate later)
 - What other typologies appear in the Patterns file besides FAN-OUT and CYCLE?
 - Are there transactions with very small amounts (e.g. `0.01`)? Are they meaningful or noise?
